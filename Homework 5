@@ -1,9 +1,9 @@
 00000000004004f0 <switch_prob>:
-  4004f0:       48 83 ee 3c             sub    $0x3c,%rsi
-  4004f4:       48 83 fe 05             cmp    $0x5,%rsi
-  4004f8:       77 29                   ja     400523 <switch_prob+0x33>
-  4004fa:       ff 24 f5 c0 05 40 00    jmpq   *0x4005c0(,%rsi,8)
-  400501:       48 8d 04 fd 00 00 00    lea    0x0(,%rdi,8),%rax
+  4004f0:       48 83 ee 3c             sub    $0x3c,%rsi                  //0x3c == 60. This is where we start the cases
+  4004f4:       48 83 fe 05             cmp    $0x5,%rsi                   //tells us this has 6 cases; if x is greater than 5, we jump to default. The only cases left are 0,1, 2,3,4,5.
+  4004f8:       77 29                   ja     400523 <switch_prob+0x33>    //for default, jump to 4523
+  4004fa:       ff 24 f5 c0 05 40 00    jmpq   *0x4005c0(,%rsi,8)         //jump table at 0x4005c0
+  400501:       48 8d 04 fd 00 00 00    lea    0x0(,%rdi,8),%rax          //result = 8*x
   400508:       00 
   400509:       c3                      retq   
   40050a:       48 89 f8                mov    %rdi,%rax
@@ -14,5 +14,8 @@
   400519:       48 29 f8                sub    %rdi,%rax
   40051c:       48 89 c7                mov    %rax,%rdi
   40051f:       48 0f af ff             imul   %rdi,%rdi
-  400523:       48 8d 47 4b             lea    0x4b(%rdi),%rax
+  400523:       48 8d 47 4b             lea    0x4b(%rdi),%rax      //default: result = x + 75
   400527:       c3                      retq   
+
+long switch_prob(long x, long n)
+{
