@@ -1,0 +1,73 @@
+Unzip file hw3.zip
+$ unzip /home/lperko/public/hw3.zip
+and move to newly created directory hw3:
+$ cd hw3
+This directory contains files hw3.c and Makefile. Open file hw3.c for editing and do the homework:
+$ emacs hw3.c
+When done, submit the homework as follows:
+$ make submit
+
+1.    Implement function sum() that takes as input an array of integers a and an integer n, sums up the first n integers of array a, and returns the sum.
+
+
+2.    For a function with prototype 
+long decode2(long x, long y, long z);
+gcc generates the following assembly code:
+decode2:
+        movq    %rdi, %rax
+        subq    %rdx, %rax
+        imulq   %rax, %rdi
+        salq    $63, %rax
+        sarq    $63, %rax
+        xorq    %rdi, %rax
+        addq    %rsi, %rax
+        ret
+Parameters x, y, and z are passed in registers %rdi, %rsi, and %rdx. The code stores the return value in register %rax.
+
+Reverse-engineer decode2. (In other words, write C code for decode2 that will have an effect equivalent to the assembly code shown.)
+
+Note: read Section 3.5 first and write your solution in hw3.c. To check your solution, compile hw3.c to assembly code using
+$ gcc -Og -S hw3.c
+and open the file hw3.s using emacs:
+$ emacs hw3.s
+
+3.    After completing the first two problems, open the file hw3.s, find the assembly code  corresponding to function sum from problem 1, and then find the assembly instructions corresponding to the body of the for loop you implemented in function sum. Write the assembly instructions you found AS A COMMENT in file hw3.c.  
+ 
+                //Solutions:
+1. long sum(long a[], long n) {
+
+  long *p = a;
+  long sum = 0;
+  int i;
+  for (i = 0;  i < (n+1); i++) {
+    sum += p[i];
+   }
+  return sum;
+}
+
+
+2.// Problem 2                                                                   
+long decode2 (long x, long y, long z) {
+
+  long m0 = x;
+  long m1 = m0 - z;
+  long m2 = x * m1;
+  long m3 = m1 << 63;
+  long m4 = m3 >> 63;
+  long m5 = m4 ^ m2;
+  long m6 = m5 + y;
+  return m6;
+}
+
+Or even this works:
+ 
+  long result = x;
+  result = result -z;
+  x = result * x;
+  result = result << 63;
+  result = result >> 63;
+  result = result ^ x;
+  result = result + y;
+  return result;
+
+
